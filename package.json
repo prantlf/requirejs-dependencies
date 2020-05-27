@@ -1,20 +1,23 @@
 {
-  "name": "reqiurejs-dependencies",
+  "name": "requirejs-dependencies",
   "version": "0.0.1",
   "description": "Finds direct and indirect dependencies of a RequireJS module.",
   "author": "Ferdinand Prantl <prantlf@gmail.com> (http://prantlf.tk/)",
   "keywords": [
     "requirejs",
     "dependencies",
-    "amd",
-    "trace"
+    "module",
+    "tracer",
+    "trace",
+    "amdjs",
+    "amd"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/prantlf/reqiurejs-dependencies.git"
+    "url": "https://github.com/prantlf/requirejs-dependencies.git"
   },
-  "homepage": "https://github.com/prantlf/reqiurejs-dependencies#readme",
-  "bugs": "https://github.com/prantlf/reqiurejs-dependencies/issues",
+  "homepage": "https://github.com/prantlf/requirejs-dependencies#readme",
+  "bugs": "https://github.com/prantlf/requirejs-dependencies/issues",
   "license": "MIT",
   "engines": {
     "node": ">=10"

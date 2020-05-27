@@ -1,4 +1,4 @@
-# reqiurejs-dependencies
+# requirejs-dependencies
 
 Finds direct and indirect dependencies of a RequireJS module. Can be used to find common dependencies of two root modules, for example:
 
@@ -17,7 +17,7 @@ src/main traced in 5.742ms
 ```
 
 ```js
-import trace from 'reqiurejs-dependencies'
+import trace from 'requirejs-dependencies'
 const { traced } = await trace({
   module: 'src/main', rootDir: 'src', config: 'src/config.js'
 })
@@ -30,27 +30,27 @@ for (const { id } of traced) console.log(id)
 If you want to use the command-line tool, install this package globally using your package manager:
 
 ```
-npm i -g reqiurejs-dependencies
-yarn global add reqiurejs-dependencies
-pnpm i -g reqiurejs-dependencies
+npm i -g requirejs-dependencies
+yarn global add requirejs-dependencies
+pnpm i -g requirejs-dependencies
 ```
 
 If you want to use this package programmatically, install it locally using your package manager:
 
 ```
-npm i reqiurejs-dependencies
-yarn add reqiurejs-dependencies
-pnpm i reqiurejs-dependencies
+npm i requirejs-dependencies
+yarn add requirejs-dependencies
+pnpm i requirejs-dependencies
 ```
 
 ## API
 
-### trace(options: Object): Promise<Object>
+### trace(options: Object): Promise\<Object\>
 
 Finds direct and indirect dependencies of a RequireJS module.
 
 ```js
-import trace from 'reqiurejs-dependencies'
+import trace from 'requirejs-dependencies'
 const { traced, time } = await trace({
   module: 'src/main', rootDir: 'src', config: 'src/config.js'
 })
