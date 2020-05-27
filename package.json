@@ -1,0 +1,57 @@
+{
+  "name": "reqiurejs-dependencies",
+  "version": "0.0.1",
+  "description": "Finds direct and indirect dependencies of a RequireJS module.",
+  "author": "Ferdinand Prantl <prantlf@gmail.com> (http://prantlf.tk/)",
+  "keywords": [
+    "requirejs",
+    "dependencies",
+    "amd",
+    "trace"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prantlf/reqiurejs-dependencies.git"
+  },
+  "homepage": "https://github.com/prantlf/reqiurejs-dependencies#readme",
+  "bugs": "https://github.com/prantlf/reqiurejs-dependencies/issues",
+  "license": "MIT",
+  "engines": {
+    "node": ">=10"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "man"
+  ],
+  "bin": {
+    "requirejs-dependencies": "bin/index"
+  },
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "man": [
+    "man/requirejs-dependencies.1"
+  ],
+  "scripts": {
+    "lint:js": "eslint --fix 'bin/*' 'lib/*.js'",
+    "lint:ts": "eslint -c .tslintrc.yml --fix lib/index.d.ts",
+    "lint": "npm run lint:js && npm run lint:ts",
+    "test": "npm run lint"
+  },
+  "dependencies": {
+    "amodro-trace": "1.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "14.0.5",
+    "@typescript-eslint/eslint-plugin": "3.0.1",
+    "@typescript-eslint/parser": "3.0.1",
+    "eslint": "7.1.0",
+    "eslint-config-standard": "14.1.1",
+    "eslint-config-standard-with-typescript": "17.0.0",
+    "eslint-plugin-import": "2.20.2",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-standard": "4.0.1",
+    "typescript": "3.9.3"
+  }
+}

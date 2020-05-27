@@ -1,0 +1,71 @@
+#!/usr/bin/env node
+
+const { version } = require('../package.json')
+const trace = require('../lib')
+const formatNumber = require('../lib/format-number')
+
+const args = process.argv
+if (args.length < 3) usage()
+
+let rootDir, config, file
+
+for (let i = 2, l = args.length; i < l; ++i) {
+  const arg = args[i]
+  let match
+  if ((match = /^(?:-|--)(\w+)$/.exec(arg))) {
+    switch (match[1]) {
+      case 'r': case 'rootdir':
+        rootDir = args[++i]
+        continue
+      case 'c': case 'config':
+        config = args[++i]
+        continue
+      case 'V': case 'version':
+        process.stdout.write(`${version}
+`)
+        process.exit(0)
+      case 'h': case 'help':
+        usage()
+    }
+    fail(`Unknown option: "${match[0]}".`)
+  }
+  if (file) fail('More than one module supplied.')
+  file = arg
+}
+
+if (!file) fail('No module supplied.')
+
+trace({ module: file, rootDir, config })
+  .then(({ traced, time }) => {
+    for (const { id } of traced) {
+      process.stdout.write(`${id}
+`)
+    }
+    const duration = Math.round(time * 1000) / 1000
+    process.stderr.write(`${file} traced in ${formatNumber(duration)}ms
+`)
+  })
+  .catch(({ message }) => fail(message))
+
+function usage () {
+  process.stdout.write(`Prints direct and indirect dependencies of a RequireJS module.
+
+Usage: requirejs-dependencies [option...] <module>
+
+Options:
+  -r|--rootdir <path>  source root directory
+  -c|--config <path>   configuration file for RequireJS
+  -V|--version         print version number
+  -h|--help            print usage instructions
+
+Examples:
+  requirejs-dependencies -r src -c src/config.js src/main
+`)
+  process.exit(0)
+}
+
+function fail (message) {
+  process.stderr.write(`${message}
+`)
+  process.exit(1)
+}

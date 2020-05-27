@@ -1,0 +1,51 @@
+.TH requirejs-dependencies "1" "May 27, 2020" "" "requirejs-dependencies manual"
+
+.SH NAME
+requirejs-dependencies - RequireJS dependncy tracer
+
+.SH SYNOPSIS
+.B requirejs-dependencies
+-r|--rootdir
+.I path
+[-c|--config
+.I path
+]
+.I module
+.RE
+
+.SH DESCRIPTION
+Prints direct and indirect dependencies of a RequireJS module.
+
+.SH OPTIONS
+.B
+.IP "-r|--rootdir path"
+source root directory
+.B
+.IP "-c|--config path"
+configuration file for RequireJS
+.B
+.IP "-V, --version"
+print version number
+.B
+.IP "-h, --help"
+print usage instructions
+
+.RE
+If no arguments are provided, usage instructions will be printed out.
+Errors and timing are printed on standard error. Dependencies, usage
+instructions and version number are printed on standard output.
+A non-zero exit code is returned in case of error.
+
+.SH EXAMPLES
+.B
+.IP "requirejs-dependencies -r src -c src/config.js src/main"
+Print dependencies of src/main.js.
+
+.SH BUGS
+requirejs-dependencies's bug tracker is located at <https://github.com/prantlf/requirejs-dependencies/issues>
+
+.SH DOCUMENTATION
+See the website for documentation <https://prantlf.github.io/requirejs-dependencies/>
+
+.SH AUTHOR
+Currently maintained by Ferdinand Prantl <prantlf@gmail.com>
