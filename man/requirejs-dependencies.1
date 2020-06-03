@@ -10,11 +10,13 @@ requirejs-dependencies - RequireJS dependncy tracer
 [-c|--config
 .I path
 ]
-.I module
+.br
+[--common] [-V|--version] [-h|--help]
+.I module...
 .RE
 
 .SH DESCRIPTION
-Prints direct and indirect dependencies of a RequireJS module.
+Prints direct and indirect dependencies of one or more RequireJS modules.
 
 .SH OPTIONS
 .B
@@ -23,6 +25,9 @@ source root directory
 .B
 .IP "-c|--config path"
 configuration file for RequireJS
+.B
+.IP "--common"
+print only common dependencies for more modules
 .B
 .IP "-V, --version"
 print version number
@@ -40,6 +45,9 @@ A non-zero exit code is returned in case of error.
 .B
 .IP "requirejs-dependencies -r src -c src/config.js src/main"
 Print dependencies of src/main.js.
+.B
+.IP "requirejs-dependencies -r src --common src/store src/shell"
+Print common dependencies of src/store.js and src/shell.js.
 
 .SH BUGS
 requirejs-dependencies's bug tracker is located at <https://github.com/prantlf/requirejs-dependencies/issues>

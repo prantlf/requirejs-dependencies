@@ -1,7 +1,7 @@
 {
   "name": "requirejs-dependencies",
   "version": "0.0.1",
-  "description": "Finds direct and indirect dependencies of a RequireJS module.",
+  "description": "Finds direct and indirect dependencies of one or more RequireJS modules.",
   "author": "Ferdinand Prantl <prantlf@gmail.com> (http://prantlf.tk/)",
   "keywords": [
     "requirejs",

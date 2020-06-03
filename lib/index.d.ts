@@ -1,20 +1,34 @@
 declare module requirejsDependencies {
-  interface Options {
-    module: string
-    rootDir: string
-    config?: string | object
-  }
-
-  interface Result {
-    traced: Dependency[]
-    time: number
-  }
-
   interface Dependency {
     id: string
     path: string
     dependents?: string[]
   }
 
-  export function traceDependencies (options: Options): Promise<Result>
+  interface SingleOptions {
+    module: string
+    rootDir: string
+    config?: string | object
+  }
+
+  interface SingleResult {
+    traced: Dependency[]
+    time: number
+  }
+
+  interface ManyOptions {
+    modules: string[]
+    rootDir: string
+    config?: string | object
+  }
+
+  interface ManyResult {
+    traced: { [key:string]: Dependency[] }
+    time: number
+  }
+
+  export function traceSingle (options: SingleOptions): Promise<SingleResult>
+  export function traceMany (options: ManyOptions): Promise<ManyResult>
+  export function getUnion (traced: Dependency[][]): Dependency[]
+  export function getIntersection (traced: Dependency[][]): Dependency[]
 }
