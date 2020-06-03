@@ -23,7 +23,7 @@ declare module requirejsDependencies {
   }
 
   interface ManyResult {
-    traced: { [key:string]: Dependency[] }
+    traced: { [key: string]: Dependency[] }
     time: number
   }
 
