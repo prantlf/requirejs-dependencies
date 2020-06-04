@@ -1,3 +1,9 @@
+## [0.0.4](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.3...v0.0.4) (2020-06-04)
+
+### Bug Fixes
+
+* Fix exporting format-millisconds ([d44049e](https://github.com/prantlf/detached-navigation/commit/d44049e1c92cf836b35c60cea866a95552f0e464))
+
 ## [0.0.3](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.2...v0.0.3) (2020-06-04)
 
 ### Features
