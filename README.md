@@ -11,7 +11,7 @@ Finds direct and indirect dependencies of a RequireJS module. Can be used to fin
 requirejs-dependencies -r src -c src/config.js --common src/store src/shell
 ```
 
-If multiple bundles are used, dependencies between bundles can be represented by just the single bundle names instead of single modules from each bundle.
+This package supports RequireJS specifics like plugins and bundles. If multiple bundles are used, dependencies between bundles can be represented by shrinking modules from a single bundle to the single bundle name in the traced output.
 
 ## Synopsis
 
@@ -60,7 +60,7 @@ import { traceSingle } from 'requirejs-dependencies'
 const { traced, time } = await traceSingle({
   module: 'src/main', rootDir: 'src', config: 'src/config.js'
 })
-for (const { id, path, dependents } of traced) { ... }
+for (const { id, path, deps, dependents } of traced) { ... }
 ```
 
 Available options:
@@ -70,7 +70,7 @@ Available options:
 | `module`          | `string` | module name recognized by RequireJS (mandatory) |
 | `rootDir`         | `string` | source root directory (mandatory)               |
 | `config`          | `string` | configuration file for RequireJS (optional)     |
-| `betweenBundles`  | `string` | show bundles as dependents instead of modules   |
+| `betweenBundles`  | `string` | show bundles ids as deps instead of module ids  |
 
 Promised result properties:
 
@@ -81,11 +81,12 @@ Promised result properties:
 
 Properties of a dependency:
 
-|  name        |  type      | description                                   |
-|--------------|------------|-----------------------------------------------|
-| `id`         | `string`   | module name used in `define()` or `require()` |
-| `path`       | `string`   | path to the module in the file system         |
-| `dependents` | `string[]` | array of dependents of the module (optional)  |
+|  name        |  type      | description                                    |
+|--------------|------------|------------------------------------------------|
+| `id`         | `string`   | module name used in `define()` or `require()`  |
+| `path`       | `string`   | path to the module in the file system          |
+| `deps`       | `string[]` | array of dependencies of the module (optional) |
+| `dependents` | `string[]` | array of dependents of the module (optional)   |
 
 If you set the option `betweenBundles` to `true`, you need to include `bundles` in your `config`, so that relations module <--> bundle can be built.
 
@@ -98,8 +99,8 @@ import { traceMany } from 'requirejs-dependencies'
 const { traced, time } = await traceMany({
   modules: ['src/store', 'src/shell'], rootDir: 'src', config: 'src/config.js'
 })
-for (const { id, path, dependents } of traced['src/store']) { ... }
-for (const { id, path, dependents } of traced['src/shell']) { ... }
+for (const { id, path, deps, dependents } of traced['src/store']) { ... }
+for (const { id, path, deps, dependents } of traced['src/shell']) { ... }
 ```
 
 Available options:
@@ -128,26 +129,24 @@ import { traceMany } from 'requirejs-dependencies'
 let { traced, time } = await traceMany({
   modules: ['src/store', 'src/shell'], rootDir: 'src', config: 'src/config.js'
 })
-traced = getUnion(traced)
-for (const { id, path, dependents } of traced) { ... }
+for (const { id, path, deps, dependents } of getUnion(traced)) { ... }
 ```
 
 ### getIntersection (manyModules: object[][] | object{[key: string]: object[]}): object[]
 
-Returns an array of dependencies that each input module include in its dependents, directly or indirectly. The input can be either array of arrays of dependencies, or an object, where keys are module names and values arrays of dependencies. A single array of the dependencies is the same as `traced` from the promised properties from [`traceSingle`].
+Returns an array of modles that each input module depends on, directly or indirectly. The input can be either array of arrays of dependencies, or an object, where keys are module names and values arrays of dependencies. A single array of the dependencies is the same as `traced` from the promised properties from [`traceSingle`].
 
 ```js
 import { traceMany } from 'requirejs-dependencies'
 let { traced, time } = await traceMany({
   modules: ['src/store', 'src/shell'], rootDir: 'src', config: 'src/config.js'
 })
-traced = getIntersection(traced)
-for (const { id, path, dependents } of traced) { ... }
+for (const { id, path, dependents } of getIntersection(traced)) { ... }
 ```
 
 ### shrinkBundleDependencies (manyModules: object[] | object{[key: string]: object[]}, bundles: object{[key: string]: string[]}, mainBundle?: string): object[]
 
-Replaces module names in lists of module dependents with parent bundle names of the particular module. Dependents are pruned so that each bundle occurs only once. The parameter `manyModules` can be either array of arrays of dependencies, or an object, where keys are module names and values arrays of dependencies. A single array of the dependencies is the same as `traced` from the promised properties from [`traceSingle`]. The parameter `bundles` is in teh same format as the bundle configuration for RequireJS. The parameter `mainBundle` is necessary of the parameter `manyModules` is just an array of traced dependencies without information what is the current bundle.
+Replaces module names in lists of module dependencies (`deps`) with parent bundle names of the particular module. Dependencies are pruned so that each bundle occurs only once. The parameter `manyModules` can be either array of arrays of dependencies, or an object, where keys are module names and values arrays of dependencies. A single array of the dependencies is the same as `traced` from the promised properties from [`traceSingle`]. The parameter `bundles` is in teh same format as the bundle configuration for RequireJS. The parameter `mainBundle` is necessary of the parameter `manyModules` is just an array of traced dependencies without information what is the current bundle.
 
 ```js
 import { traceSingle } from 'requirejs-dependencies'
@@ -156,6 +155,31 @@ let { traced, config, time } = await traceSingle({
 })
 traced = shrinkBundleDependencies(traced, config.bundles, 'src/data')
 for (const { id, path, dependents } of traced) { ... }
+```
+
+### function loadConfig (path: string): object
+
+Returns the RequiteJS configuration as an object. The configuration is usually set by a `require.config` statement in a separate file. It is not exported from the file. This method extracts it without applying it to global RequireJS.
+
+```js
+import trace from 'amodro-trace'
+import { loadConfig } from 'requirejs-dependencies'
+const config = loadConfig(config)
+const { traced } = await trace({ id, rootDir }, config)
+for (const { id } of traced) console.log(id)
+```
+
+### function formatMilliseconds (duration: number): string
+
+Formats a number of milliseconds to a readable duration as a string.
+
+```js
+import { traceSingle, formatMilliseconds } from 'requirejs-dependencies'
+const { traced, time } = await traceSingle({
+  module: 'src/main', rootDir: 'src', config: 'src/config.js'
+})
+for (const { id } of traced) console.log(id)
+console.log(`"src/main" traced in ${formatMilliseconds(time)}`)
 ```
 
 ## Command-line
@@ -171,7 +195,7 @@ Options:
   -r|--rootdir <path>  source root directory
   -c|--config <path>   configuration file for RequireJS
   --common             print only common dependencies for more modules
-  --between-bundles    print bundles as dependents instead of modules
+  --between-bundles    print bundles as dependencies instead of modules
   -V|--version         print version number
   -h|--help            print usage instructions
 

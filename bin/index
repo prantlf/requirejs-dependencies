@@ -71,7 +71,7 @@ Options:
   -r|--rootdir <path>  source root directory
   -c|--config <path>   configuration file for RequireJS
   --common             print only common dependencies for more modules
-  --between-bundles    print bundles as dependents instead of modules
+  --between-bundles    print bundles as dependencies instead of modules
   -V|--version         print version number
   -h|--help            print usage instructions
 

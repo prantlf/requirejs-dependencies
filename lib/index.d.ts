@@ -2,6 +2,7 @@ declare module requirejsDependencies {
   interface Dependency {
     id: string
     path?: string
+    deps?: string[]
     dependents?: string[]
   }
 
