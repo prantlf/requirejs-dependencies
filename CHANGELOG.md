@@ -1,4 +1,4 @@
-## [0.0.6](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.5...v0.0.6) (2020-06-04)
+## [0.0.6](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.5...v0.0.6) (2020-06-05)
 
 ### Bug Fixes
 
@@ -7,6 +7,13 @@
 ### Features
 
 * Export loadConfig and formatMilliseconds ([2a85303](https://github.com/prantlf/requirejs-dependencies/commit/2a853038b2a041d11182ce3fb0c58db86fd53e32))
+* Optionally explode specified bundles or implode the bundle of the main tracked module ([3d05eb9](https://github.com/prantlf/requirejs-dependencies/commit/3d05eb943d9f5d5107ad2b3363d19a4dfee59dc4))
+
+BREAKING CHANGE: Only named exports are available, some identifiers were renamed.
+
+* Remove non-named export of traceSingle
+* Rename function shrinkBundleDependencies to implodeBundleDependencies
+* Rename option between-bundles to implode-bundles
 
 ## [0.0.5](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.4...v0.0.5) (2020-06-04)
 
