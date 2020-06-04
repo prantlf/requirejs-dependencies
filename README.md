@@ -11,6 +11,8 @@ Finds direct and indirect dependencies of a RequireJS module. Can be used to fin
 requirejs-dependencies -r src -c src/config.js --common src/store src/shell
 ```
 
+If multiple bundles are used, dependencies between bundles can be represented by just the single bundle names instead of single modules from each bundle.
+
 ## Synopsis
 
 ```
@@ -63,11 +65,12 @@ for (const { id, path, dependents } of traced) { ... }
 
 Available options:
 
-|  name     |  type    | description                                     |
-|-----------|----------|-------------------------------------------------|
-| `module`  | `string` | module name recognized by RequireJS (mandatory) |
-| `rootDir` | `string` | source root directory (mandatory)               |
-| `config`  | `string` | configuration file for RequireJS (optional)     |
+|  name             |  type    | description                                     |
+|-------------------|----------|-------------------------------------------------|
+| `module`          | `string` | module name recognized by RequireJS (mandatory) |
+| `rootDir`         | `string` | source root directory (mandatory)               |
+| `config`          | `string` | configuration file for RequireJS (optional)     |
+| `betweenBundles`  | `string` | show bundles as dependents instead of modules   |
 
 Promised result properties:
 
@@ -83,6 +86,8 @@ Properties of a dependency:
 | `id`         | `string`   | module name used in `define()` or `require()` |
 | `path`       | `string`   | path to the module in the file system         |
 | `dependents` | `string[]` | array of dependents of the module (optional)  |
+
+If you set the option `betweenBundles` to `true`, you need to include `bundles` in your `config`, so that relations module <--> bundle can be built.
 
 ### traceMany(options: object): Promise\<object\>
 
@@ -114,29 +119,42 @@ Promised result properties:
 
 The `traced` object contains input module names as keys and arrays of their dependencies as values. The array of the dependencies is the same as `traced` from the promised properties from [`traceSingle`].
 
-### getUnion (manyModules: object[][]): object[]
+### getUnion (manyModules: object[][] | object{[key: string]: object[]}): object[]
 
-Returns an array of distinct dependencies after dropping duplicates from the array of arrays of dependencies. A single array of the dependencies is the same as `traced` from the promised properties from [`traceSingle`].
+Returns an array of distinct dependencies after dropping duplicates from the input. The input can be either array of arrays of dependencies, or an object, where keys are module names and values arrays of dependencies. A single array of the dependencies is the same as `traced` from the promised properties from [`traceSingle`].
 
 ```js
 import { traceMany } from 'requirejs-dependencies'
 let { traced, time } = await traceMany({
   modules: ['src/store', 'src/shell'], rootDir: 'src', config: 'src/config.js'
 })
-traced = getUnion(Object.values(traced))
+traced = getUnion(traced)
 for (const { id, path, dependents } of traced) { ... }
 ```
 
-### getIntersection (manyModules: object[][]): object[]
+### getIntersection (manyModules: object[][] | object{[key: string]: object[]}): object[]
 
-Returns an array of dependencies that each input module include in its depednents, directly or indirectly. A single array of the dependencies is the same as `traced` from the promised properties from [`traceSingle`].
+Returns an array of dependencies that each input module include in its dependents, directly or indirectly. The input can be either array of arrays of dependencies, or an object, where keys are module names and values arrays of dependencies. A single array of the dependencies is the same as `traced` from the promised properties from [`traceSingle`].
 
 ```js
 import { traceMany } from 'requirejs-dependencies'
 let { traced, time } = await traceMany({
   modules: ['src/store', 'src/shell'], rootDir: 'src', config: 'src/config.js'
 })
-traced = getIntersection(Object.values(traced))
+traced = getIntersection(traced)
+for (const { id, path, dependents } of traced) { ... }
+```
+
+### shrinkBundleDependencies (manyModules: object[] | object{[key: string]: object[]}, bundles: object{[key: string]: string[]}, mainBundle?: string): object[]
+
+Replaces module names in lists of module dependents with parent bundle names of the particular module. Dependents are pruned so that each bundle occurs only once. The parameter `manyModules` can be either array of arrays of dependencies, or an object, where keys are module names and values arrays of dependencies. A single array of the dependencies is the same as `traced` from the promised properties from [`traceSingle`]. The parameter `bundles` is in teh same format as the bundle configuration for RequireJS. The parameter `mainBundle` is necessary of the parameter `manyModules` is just an array of traced dependencies without information what is the current bundle.
+
+```js
+import { traceSingle } from 'requirejs-dependencies'
+let { traced, config, time } = await traceSingle({
+  module: 'src/store', rootDir: 'src', config: 'src/config.js'
+})
+traced = shrinkBundleDependencies(traced, config.bundles, 'src/data')
 for (const { id, path, dependents } of traced) { ... }
 ```
 
@@ -153,8 +171,18 @@ Options:
   -r|--rootdir <path>  source root directory
   -c|--config <path>   configuration file for RequireJS
   --common             print only common dependencies for more modules
+  --between-bundles    print bundles as dependents instead of modules
   -V|--version         print version number
   -h|--help            print usage instructions
+
+If you enable the option between-bundles, you need to include bundles
+in your config, so that relations module <--> bundle can be built.
+
+If no arguments are provided, usage instructions will be printed out.
+Errors and timing are printed on standard error. Dependencies, usage
+instructions and version number are printed on standard output.
+
+A non-zero exit code is returned in case of error.
 
 Examples:
   requirejs-dependencies -r src -c src/config.js src/main

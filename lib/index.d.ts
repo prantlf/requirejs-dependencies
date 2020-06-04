@@ -1,7 +1,7 @@
 declare module requirejsDependencies {
   interface Dependency {
     id: string
-    path: string
+    path?: string
     dependents?: string[]
   }
 
@@ -27,8 +27,11 @@ declare module requirejsDependencies {
     time: number
   }
 
+  type TracedInput = Dependency[][] | { [key: string]: Dependency[] }
+
   export function traceSingle (options: SingleOptions): Promise<SingleResult>
   export function traceMany (options: ManyOptions): Promise<ManyResult>
-  export function getUnion (traced: Dependency[][]): Dependency[]
-  export function getIntersection (traced: Dependency[][]): Dependency[]
+  export function getUnion (traced: TracedInput): Dependency[]
+  export function getIntersection (traced: TracedInput): Dependency[]
+  export function shrinkBundleDependencies (traced: TracedInput): TracedInput
 }

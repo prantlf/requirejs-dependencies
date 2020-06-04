@@ -1,7 +1,8 @@
 dependencies:
   amodro-trace: 1.0.3
+  requirejs-dependencies: 'link:'
 devDependencies:
-  '@types/node': 14.0.9
+  '@types/node': 14.0.10
   '@typescript-eslint/eslint-plugin': 3.1.0_0e27ac235d5bbd2b6f9bd0553416eb5e
   '@typescript-eslint/parser': 3.1.0_eslint@7.1.0+typescript@3.9.3
   eslint: 7.1.0
@@ -44,10 +45,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-8+KAKzEvSUdeo+kmqnKrqgeE+LcA0tjYWFY7RPProVYwnqDjukzO+3b6dLD56rYX5TdWejnEOLJYOIeh4CXKuA==
-  /@types/node/14.0.9:
+  /@types/node/14.0.10:
     dev: true
     resolution:
-      integrity: sha512-0sCTiXKXELOBxvZLN4krQ0FPOAA7ij+6WwvD0k/PHd9/KAkr4dXel5J9fh6F4x1FwAQILqAWkmpeuS6mjf1iKA==
+      integrity: sha512-Bz23oN/5bi0rniKT24ExLf4cK0JdvN3dH/3k0whYkdN4eI4vS2ZW/2ENNn2uxHCzWcbdHIa/GRuWQytfzCjRYw==
   /@typescript-eslint/eslint-plugin/3.1.0_0e27ac235d5bbd2b6f9bd0553416eb5e:
     dependencies:
       '@typescript-eslint/experimental-utils': 3.1.0_eslint@7.1.0+typescript@3.9.3
@@ -1540,7 +1541,7 @@ packages:
     resolution:
       integrity: sha512-/lg70HAjtkUgWPVZhZcm+T4hkL8Zbtp1nFNOn3lRrxnlv50SRBv7cR7RqR+GMsd3hUXy9hWBo4CHTbFTcOYwig==
 specifiers:
-  '@types/node': 14.0.9
+  '@types/node': 14.0.10
   '@typescript-eslint/eslint-plugin': 3.1.0
   '@typescript-eslint/parser': 3.1.0
   amodro-trace: 1.0.3
@@ -1551,4 +1552,5 @@ specifiers:
   eslint-plugin-node: 11.1.0
   eslint-plugin-promise: 4.2.1
   eslint-plugin-standard: 4.0.1
+  requirejs-dependencies: 'workspace:^0.0.2'
   typescript: 3.9.3
