@@ -1,3 +1,13 @@
+## [0.0.6](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.5...v0.0.6) (2020-06-04)
+
+### Bug Fixes
+
+* Fix usage of deps (depandencies) and dependents in the traced output, export loadConfig and formatMilliseconds ([2a85303](https://github.com/prantlf/requirejs-dependencies/commit/2a853038b2a041d11182ce3fb0c58db86fd53e32))
+
+### Features
+
+* Export loadConfig and formatMilliseconds ([2a85303](https://github.com/prantlf/requirejs-dependencies/commit/2a853038b2a041d11182ce3fb0c58db86fd53e32))
+
 ## [0.0.5](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.4...v0.0.5) (2020-06-04)
 
 ### Bug Fixes

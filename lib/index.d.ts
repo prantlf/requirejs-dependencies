@@ -6,33 +6,43 @@ declare module requirejsDependencies {
     dependents?: string[]
   }
 
-  interface SingleOptions {
+  interface TraceSingleOptions {
     module: string
     rootDir: string
     config?: string | object
   }
 
-  interface SingleResult {
+  interface TraceSingleResult {
     traced: Dependency[]
     time: number
   }
 
-  interface ManyOptions {
+  interface TraceManyOptions {
     modules: string[]
     rootDir: string
     config?: string | object
   }
 
-  interface ManyResult {
+  interface TraceManyResult {
     traced: { [key: string]: Dependency[] }
     time: number
   }
 
   type TracedInput = Dependency[][] | { [key: string]: Dependency[] }
 
-  export function traceSingle (options: SingleOptions): Promise<SingleResult>
-  export function traceMany (options: ManyOptions): Promise<ManyResult>
+  interface BundleImplodingOptions {
+    traced: TracedInput
+    bundles: { [key: string]: string[] }
+    explodeBundles?: string[]
+    implodeCurrentBundle?: boolean
+    tracedBundle?: string
+  }
+
+  export function traceSingle (options: TraceSingleOptions): Promise<TraceSingleResult>
+  export function traceMany (options: TraceManyOptions): Promise<TraceManyResult>
   export function getUnion (traced: TracedInput): Dependency[]
   export function getIntersection (traced: TracedInput): Dependency[]
-  export function shrinkBundleDependencies (traced: TracedInput): TracedInput
+  export function implodeBundleDependencies (options: BundleImplodingOptions): TracedInput
+  export function loadConfig (path: string): object
+  export function formatMilliseconds (duration: number): string
 }

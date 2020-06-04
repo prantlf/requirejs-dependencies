@@ -2,32 +2,40 @@
 
 const { version } = require('../package.json')
 const {
-  traceMany, getUnion, getIntersection, shrinkBundleDependencies
+  traceMany, getUnion, getIntersection, implodeBundleDependencies, formatMilliseconds
 } = require('../lib')
-const formatMilliseconds = require('../lib/format-milliseconds')
 
 const args = process.argv
+// node, this script and at least one module to trace its dependencies
 if (args.length < 3) usage()
 
 const modules = []
-let rootDir, config, common, betweenBundles
+let rootDir, config, common, implodeBundles, explodeBundles, implodeCurrentBundle
 
+// iterate over all arguments staring after the node and script
 for (let i = 2, l = args.length; i < l; ++i) {
   const arg = args[i]
   let match
+  // recognize -name or --name
   if ((match = /^(?:-|--)([-_a-zA-Z0-9]+)$/.exec(arg))) {
     switch (match[1]) {
       case 'r': case 'rootdir':
-        rootDir = args[++i]
+        rootDir = args[++i].trim()
         continue
       case 'c': case 'config':
-        config = args[++i]
-        continue
-      case 'between-bundles':
-        betweenBundles = true
+        config = args[++i].trim()
         continue
       case 'common':
         common = true
+        continue
+      case 'implode-bundles':
+        implodeBundles = true
+        continue
+      case 'explode-bundles':
+        explodeBundles = args[++i].trim().split(/\s*,\s*/)
+        continue
+      case 'implode-current-bundle':
+        implodeCurrentBundle = true
         continue
       case 'V': case 'version':
         process.stdout.write(`${version}
@@ -38,14 +46,20 @@ for (let i = 2, l = args.length; i < l; ++i) {
     }
     fail(`Unknown option: "${match[0]}".`)
   }
+  // arguments not starting with dash are module names
   modules.push(arg)
 }
 
 if (!modules.length) fail('No module supplied.')
 
 traceMany({ modules, rootDir, config })
-  .then(({ traced, time }) => {
-    if (betweenBundles) traced = shrinkBundleDependencies(traced, config.bundles)
+  .then(({ traced, config, time }) => {
+    if (implodeBundles) {
+      traced = implodeBundleDependencies({
+        traced, bundles: config.bundles, explodeBundles, implodeCurrentBundle
+      })
+    }
+    // if more than one originating module was entered, merge their dependencies
     if (modules.length > 1) {
       const method = common ? getIntersection : getUnion
       traced = method(traced)
@@ -68,14 +82,16 @@ function usage () {
 Usage: requirejs-dependencies [option...] <module>...
 
 Options:
-  -r|--rootdir <path>  source root directory
-  -c|--config <path>   configuration file for RequireJS
-  --common             print only common dependencies for more modules
-  --between-bundles    print bundles as dependencies instead of modules
-  -V|--version         print version number
-  -h|--help            print usage instructions
+  -r|--rootdir <path>       source root directory
+  -c|--config <path>        configuration file for RequireJS
+  --common                  print only common dependencies for more modules
+  --implode-bundles         print bundles as dependencies instead of modules
+  --explode-bundles <list>  specify bundles which modules will remain listed
+  --implode-current-bundle  do not list dependencies from the same bundle
+  -V|--version              print version number
+  -h|--help                 print usage instructions
 
-If you enable the option between-bundles, you need to include bundles
+If you enable the option implode-bundles, you need to include bundles
 in your config, so that relations module <--> bundle can be built.
 
 If no arguments are provided, usage instructions will be printed out.

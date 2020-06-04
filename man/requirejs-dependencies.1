@@ -11,7 +11,11 @@ requirejs-dependencies - RequireJS dependncy tracer
 .I path
 ]
 .br
-[--common] [--between-bundles] [-V|--version] [-h|--help]
+[--common] [--implode-bundles] [--explode-bundles
+.I list
+]
+.br
+[--implode-current-bundle] [-V|--version] [-h|--help]
 .I module...
 .RE
 
@@ -29,8 +33,14 @@ configuration file for RequireJS
 .IP "--common"
 print only common dependencies for more modules
 .B
-.IP "--between-bundles"
+.IP "--implode-bundles"
 print bundles as dependencies instead of modules
+.B
+.IP "--explode-bundles list"
+specify bundles which modules will remain listed
+.B
+.IP "--implode-current-bundle"
+do not list dependencies from the same bundle
 .B
 .IP "-V, --version"
 print version number
@@ -39,7 +49,7 @@ print version number
 print usage instructions
 
 .RE
-If you enable the option between-bundles, you need to include bundles
+If you enable the option implode-bundles, you need to include bundles
 in your config, so that relations module <--> bundle can be built.
 
 If no arguments are provided, usage instructions will be printed out.

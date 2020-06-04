@@ -11,7 +11,7 @@ Finds direct and indirect dependencies of a RequireJS module. Can be used to fin
 requirejs-dependencies -r src -c src/config.js --common src/store src/shell
 ```
 
-This package supports RequireJS specifics like plugins and bundles. If multiple bundles are used, dependencies between bundles can be represented by shrinking modules from a single bundle to the single bundle name in the traced output.
+This package supports RequireJS specifics like plugins and bundles. If multiple bundles are used, dependencies between bundles can be represented by imploding modules from a single bundle to the single bundle name in the traced output.
 
 ## Synopsis
 
@@ -70,7 +70,6 @@ Available options:
 | `module`          | `string` | module name recognized by RequireJS (mandatory) |
 | `rootDir`         | `string` | source root directory (mandatory)               |
 | `config`          | `string` | configuration file for RequireJS (optional)     |
-| `betweenBundles`  | `string` | show bundles ids as deps instead of module ids  |
 
 Promised result properties:
 
@@ -85,10 +84,8 @@ Properties of a dependency:
 |--------------|------------|------------------------------------------------|
 | `id`         | `string`   | module name used in `define()` or `require()`  |
 | `path`       | `string`   | path to the module in the file system          |
-| `deps`       | `string[]` | array of dependencies of the module (optional) |
-| `dependents` | `string[]` | array of dependents of the module (optional)   |
-
-If you set the option `betweenBundles` to `true`, you need to include `bundles` in your `config`, so that relations module <--> bundle can be built.
+| `deps`       | `string[]` | dependencies of the module (optional)          |
+| `dependents` | `string[]` | dependents of the module (optional)            |
 
 ### traceMany(options: object): Promise\<object\>
 
@@ -144,16 +141,28 @@ let { traced, time } = await traceMany({
 for (const { id, path, dependents } of getIntersection(traced)) { ... }
 ```
 
-### shrinkBundleDependencies (manyModules: object[] | object{[key: string]: object[]}, bundles: object{[key: string]: string[]}, mainBundle?: string): object[]
+### implodeBundleDependencies (options: object): object[]
 
-Replaces module names in lists of module dependencies (`deps`) with parent bundle names of the particular module. Dependencies are pruned so that each bundle occurs only once. The parameter `manyModules` can be either array of arrays of dependencies, or an object, where keys are module names and values arrays of dependencies. A single array of the dependencies is the same as `traced` from the promised properties from [`traceSingle`]. The parameter `bundles` is in teh same format as the bundle configuration for RequireJS. The parameter `mainBundle` is necessary of the parameter `manyModules` is just an array of traced dependencies without information what is the current bundle.
+Replaces module names in module dependencies with parent bundle names of the particular modules. Then the dependencies are pruned so that each bundle occurs only once there. An array of the dependencies is the same as `traced` from the promised properties from [`traceSingle`]. The parameter `bundles` is in the same format as the bundle configuration for RequireJS. The parameter `tracedBundle` is necessary if the parameter `traced` is just an array of traced dependencies without information what is the current bundle.
+
+Available options:
+
+|  name                  |  type                                        | description                  |
+|------------------------|----------------------------------------------|-----------------------------|
+| `traced`               | `object[] | object{[key: string]: object[]}` | output of `traceSingle` or `traceMany` |
+| `bundles`              | `object{[key: string]: string[]}`            | bundle configuration for RequireJS  |
+| `explodeBundles`       | `string[]` | bundles that should be exploded to modules (optional) |
+| `implodeCurrentBundle` | `boolean`  | hide module dependencies from the same bundle (optional) |
+| `tracedBundle`         | `string`   | parent bundle of plain array of traced modules (optional) |
 
 ```js
 import { traceSingle } from 'requirejs-dependencies'
 let { traced, config, time } = await traceSingle({
   module: 'src/store', rootDir: 'src', config: 'src/config.js'
 })
-traced = shrinkBundleDependencies(traced, config.bundles, 'src/data')
+traced = implodeBundleDependencies({
+  traced, bundles: config.bundles, tracedBundle: 'src/data'
+})
 for (const { id, path, dependents } of traced) { ... }
 ```
 
@@ -192,14 +201,16 @@ Prints direct and indirect dependencies of one or more RequireJS modules.
 Usage: requirejs-dependencies [option...] <module>...
 
 Options:
-  -r|--rootdir <path>  source root directory
-  -c|--config <path>   configuration file for RequireJS
-  --common             print only common dependencies for more modules
-  --between-bundles    print bundles as dependencies instead of modules
-  -V|--version         print version number
-  -h|--help            print usage instructions
+  -r|--rootdir <path>       source root directory
+  -c|--config <path>        configuration file for RequireJS
+  --common                  print only common dependencies for more modules
+  --implode-bundles         print bundles as dependencies instead of modules
+  --explode-bundles <list>  specify bundles which modules will remain listed
+  --implode-current-bundle  do not list dependencies from the same bundle
+  -V|--version              print version number
+  -h|--help                 print usage instructions
 
-If you enable the option between-bundles, you need to include bundles
+If you enable the option implode-bundles, you need to include bundles
 in your config, so that relations module <--> bundle can be built.
 
 If no arguments are provided, usage instructions will be printed out.
