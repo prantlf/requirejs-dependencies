@@ -17,7 +17,7 @@ for (let i = 2, l = args.length; i < l; ++i) {
   const arg = args[i]
   let match
   // recognize -name or --name
-  if ((match = /^(?:-|--)([-_a-zA-Z0-9]+)$/.exec(arg))) {
+  if ((match = /^(?:-|--)([a-z][-a-z]*)$/.exec(arg))) {
     switch (match[1]) {
       case 'r': case 'rootdir':
         rootDir = args[++i].trim()
