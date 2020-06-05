@@ -1,3 +1,9 @@
+## [0.0.7](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.6...v0.0.7) (2020-06-05)
+
+### Features
+
+* Recognize plugins without a module to point to as a sole dependency ([b73174c](https://github.com/prantlf/requirejs-dependencies/commit/b73174c0965ba166b5fe3dfa40ce6541fa962b93))
+
 ## [0.0.6](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.5...v0.0.6) (2020-06-05)
 
 ### Bug Fixes
