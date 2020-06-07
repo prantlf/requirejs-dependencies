@@ -203,10 +203,16 @@ Usage: requirejs-dependencies [option...] <module>...
 Options:
   -r|--rootdir <path>       source root directory
   -c|--config <path>        configuration file for RequireJS
-  --common                  print only common dependencies for more modules
+  --serve                   start server for interactive module inspection
   --implode-bundles         print bundles as dependencies instead of modules
   --explode-bundles <list>  specify bundles which modules will remain listed
   --implode-current-bundle  do not list dependencies from the same bundle
+  -l|--layout layout        graph layout (dot,neato,fdp,twopi,circo,osage)
+  --emphasize-directs       render direct dependencies with different colour
+  --cluster-directs         cluster direct dependencies together
+  --common                  print only common dependencies for more modules
+  --tree                    print module dependencies as a tree
+  --image <path>            generate image with dependency graph
   -V|--version              print version number
   -h|--help                 print usage instructions
 

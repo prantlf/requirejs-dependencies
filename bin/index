@@ -2,15 +2,19 @@
 
 const { version } = require('../package.json')
 const {
-  traceMany, getUnion, getIntersection, implodeBundleDependencies, formatMilliseconds
+  startServer, traceMany, getUnion, getIntersection, excludePluginDependencies,
+  implodeBundleDependencies, createTree, generateGraph, renderGraph,
+  printList, printTree, printTiming, printEndpoint, splitList
 } = require('../lib')
+const fail = require('../lib/fail')
 
 const args = process.argv
 // node, this script and at least one module to trace its dependencies
 if (args.length < 3) usage()
 
 const modules = []
-let rootDir, config, common, implodeBundles, explodeBundles, implodeCurrentBundle
+let rootDir, config, serve, common, tree, image, implodeBundles, excludePlugins,
+  explodeBundles, implodeCurrentBundle, layout, emphasizeDirects, clusterDirects
 
 // iterate over all arguments staring after the node and script
 for (let i = 2, l = args.length; i < l; ++i) {
@@ -25,17 +29,38 @@ for (let i = 2, l = args.length; i < l; ++i) {
       case 'c': case 'config':
         config = args[++i].trim()
         continue
-      case 'common':
-        common = true
+      case 'serve':
+        serve = true
+        continue
+      case 'exclude-plugins':
+        excludePlugins = splitList(args[++i])
         continue
       case 'implode-bundles':
         implodeBundles = true
         continue
       case 'explode-bundles':
-        explodeBundles = args[++i].trim().split(/\s*,\s*/)
+        explodeBundles = splitList(args[++i])
         continue
       case 'implode-current-bundle':
         implodeCurrentBundle = true
+        continue
+      case 'l': case 'layout':
+        layout = args[++i].trim()
+        continue
+      case 'emphasize-directs':
+        emphasizeDirects = true
+        continue
+      case 'cluster-directs':
+        clusterDirects = true
+        continue
+      case 'common':
+        common = true
+        continue
+      case 'tree':
+        tree = true
+        continue
+      case 'image':
+        image = args[++i].trim()
         continue
       case 'V': case 'version':
         process.stdout.write(`${version}
@@ -50,31 +75,46 @@ for (let i = 2, l = args.length; i < l; ++i) {
   modules.push(arg)
 }
 
-if (!modules.length) fail('No module supplied.')
-
-traceMany({ modules, rootDir, config })
-  .then(({ traced, config, time }) => {
-    if (implodeBundles) {
-      traced = implodeBundleDependencies({
-        traced, bundles: config.bundles, explodeBundles, implodeCurrentBundle
-      })
-    }
-    // if more than one originating module was entered, merge their dependencies
-    if (modules.length > 1) {
-      const method = common ? getIntersection : getUnion
-      traced = method(traced)
-    } else {
-      traced = traced[modules[0]]
-    }
-    for (const { id } of traced) {
-      process.stdout.write(`${id}
-`)
-    }
-    const prefix = modules.length > 1 ? `${modules.length} modules` : modules[0]
-    process.stderr.write(`${prefix} traced in ${formatMilliseconds(time)}
-`)
-  })
-  .catch(({ message }) => fail(message))
+if (serve) {
+  const host = process.env.HOST || '0.0.0.0'
+  const port = parseInt(process.env.PORT || 0)
+  startServer({ host, port, rootDir, config })
+    .then(printEndpoint)
+    .catch(fail)
+} else {
+  if (!modules.length) fail('No module supplied.')
+  traceMany({ modules, rootDir, config })
+    .then(({ traced, config, time }) => {
+      if (excludePlugins) {
+        traced = excludePluginDependencies(traced, excludePlugins)
+      }
+      if (implodeBundles) {
+        traced = implodeBundleDependencies({
+          traced, bundles: config.bundles, explodeBundles, implodeCurrentBundle
+        })
+      }
+      // if more than one originating module was entered, merge their dependencies
+      if (modules.length > 1) {
+        const aggregate = common ? getIntersection : getUnion
+        traced = aggregate(traced)
+      } else {
+        traced = traced[modules[0]]
+      }
+      let tracedTree
+      if (tree || image) tracedTree = createTree(modules, traced)
+      if (!image) {
+        if (tree) printTree(tracedTree)
+        else printList(traced)
+      }
+      printTiming(modules, time)
+      if (image) {
+        return renderGraph(generateGraph(tracedTree, {
+          G: { layout }, emphasizeDirects, clusterDirects
+        }), image)
+      }
+    })
+    .catch(fail)
+}
 
 function usage () {
   process.stdout.write(`Prints direct and indirect dependencies of one or more RequireJS modules.
@@ -84,10 +124,16 @@ Usage: requirejs-dependencies [option...] <module>...
 Options:
   -r|--rootdir <path>       source root directory
   -c|--config <path>        configuration file for RequireJS
-  --common                  print only common dependencies for more modules
+  --serve                   start server for interactive module inspection
   --implode-bundles         print bundles as dependencies instead of modules
   --explode-bundles <list>  specify bundles which modules will remain listed
   --implode-current-bundle  do not list dependencies from the same bundle
+  -l|--layout layout        graph layout (dot,neato,fdp,twopi,circo,osage)
+  --emphasize-directs       render direct dependencies with different colour
+  --cluster-directs         cluster direct dependencies together
+  --common                  print only common dependencies for more modules
+  --tree                    print module dependencies as a tree
+  --image <path>            generate image with dependency graph
   -V|--version              print version number
   -h|--help                 print usage instructions
 
@@ -105,10 +151,4 @@ Examples:
   requirejs-dependencies -r src --common src/store src/shell
 `)
   process.exit(0)
-}
-
-function fail (message) {
-  process.stderr.write(`${message}
-`)
-  process.exit(1)
 }

@@ -1,0 +1,116 @@
+html { height: 100% }
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+@font-face {
+  font-family: 'actions';
+  src: url('/www/fonts/actions.woff?ucthii') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.action-button,
+.dt-buttons .buttons-collection > span {
+  font-family: 'actions' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* https://icomoon.io/app/#/select/font
+  earth:    e9ca
+  sun:      e9d4
+  onedrive: eaaf
+*/
+
+header.container-fluid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 50px;
+  margin-bottom: 10px;
+  flex-wrap: nowrap;
+}
+
+footer.container-fluid {
+  margin-top: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+header .buttons button { margin-right: 10px }
+
+#theme-switcher { margin-left: auto }
+
+main,
+#alert { display: none }
+
+main > form {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+header > *,
+main > form > * { margin-right: 20px }
+
+.col-form-label {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.form-control,
+input[type=range] { margin-left: 10px }
+
+input[type=checkbox] {
+  margin-top: .1rem;
+  margin-right: .5rem;
+}
+
+#module { min-width: 30rem }
+
+.btn-circle { border-radius: 20px }
+
+#graph {
+  transform: scale(.9);
+  transform-origin: left top;
+}
+
+#progress {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 3px;
+  animation: loader 3s ease infinite;
+  background-color: #64ceaa;
+}
+
+@keyframes loader {
+	0% { width: 0 }
+	100% { width: calc(100vw - 80px) }
+}
+
+@media (max-width: 600px) {
+  header.container-fluid {
+    flex-wrap: wrap;
+    padding-right: 0;
+  }
+
+  #module {
+    min-width: auto;
+    width: calc(100vw - 8.5em);
+  }
+}

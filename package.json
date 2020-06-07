@@ -1,6 +1,6 @@
 {
   "name": "requirejs-dependencies",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Finds direct and indirect dependencies of one or more RequireJS modules.",
   "author": "Ferdinand Prantl <prantlf@gmail.com> (http://prantlf.tk/)",
   "keywords": [
@@ -25,7 +25,8 @@
   "files": [
     "bin",
     "lib",
-    "man"
+    "man",
+    "www"
   ],
   "bin": {
     "requirejs-dependencies": "bin/index"
@@ -36,25 +37,43 @@
     "man/requirejs-dependencies.1"
   ],
   "scripts": {
-    "lint:js": "eslint --fix 'bin/*' 'lib/*.js'",
+    "build:js": "esbuild --outfile=www/js/index.min.js --external:path --external:util --external:child_process --external:fs --format=iife --sourcemap --bundle --minify www/js/index.js && esbuild --outfile=www/js/graph-support.min.js --sourcemap --minify www/js/graph-support.js && esbuild --outfile=www/js/module-support.min.js --sourcemap --minify www/js/module-support.js && esbuild --outfile=www/js/theme-support.min.js --sourcemap --minify www/js/theme-support.js",
+    "build:css": "csso www/css/index.css -s file -o www/css/index.min.css && csso www/css/bootstrap.darkly.css -s file -o www/css/bootstrap.darkly.min.css && csso www/css/bootstrap.flatly.css -s file -o www/css/bootstrap.flatly.min.css && html-minifier --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --remove-attribute-quotes --minify-css true --minify-js true -o www/index.min.html www/index.html",
+    "build:html": "html-minifier --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --remove-attribute-quotes --minify-css true --minify-js true -o www/index.min.html www/index.html && sed -i \"s/VERSION/0.0.8/\" www/index.min.html",
+    "build": "npm run build:js && npm run build:css && npm run build:html",
+    "prepare": "npm run build",
+    "lint:js": "eslint --fix --ignore-pattern 'www/js/*.min.js' 'bin/*' lib www/js",
     "lint:ts": "eslint -c .tslintrc.yml --fix lib/index.d.ts",
     "lint": "npm run lint:js && npm run lint:ts",
     "test": "npm run lint"
   },
   "dependencies": {
-    "amodro-trace": "1.0.3"
+    "@aduh95/viz.js": "3.0.0",
+    "@hpcc-js/wasm": "0.3.14",
+    "amodro-trace": "1.0.3",
+    "bootstrap": "4.5.0",
+    "compression": "1.7.4",
+    "connect": "3.7.0",
+    "graphviz": "0.0.9",
+    "jquery": "3.5.1",
+    "morgan": "1.10.0",
+    "popper.js": "1.16.1",
+    "serve-static": "1.14.1"
   },
   "devDependencies": {
     "@types/node": "14.0.11",
     "@typescript-eslint/eslint-plugin": "3.1.0",
     "@typescript-eslint/parser": "3.1.0",
-    "eslint": "7.1.0",
+    "csso-cli": "3.0.0",
+    "esbuild": "0.4.9",
+    "eslint": "7.2.0",
     "eslint-config-standard": "14.1.1",
     "eslint-config-standard-with-typescript": "18.0.2",
     "eslint-plugin-import": "2.20.2",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-standard": "4.0.1",
+    "html-minifier": "4.0.0",
     "typescript": "3.9.5"
   }
 }

@@ -11,11 +11,19 @@ requirejs-dependencies - RequireJS dependncy tracer
 .I path
 ]
 .br
-[--common] [--implode-bundles] [--explode-bundles
+[--serve] [--implode-bundles] [--explode-bundles
 .I list
 ]
 .br
-[--implode-current-bundle] [-V|--version] [-h|--help]
+[--implode-current-bundle] [--common] [--tree] [--image
+.I path
+]
+.br
+[-l|--layout
+.I layout
+] [--cluster-directs] [--cluster-directs]
+.br
+[-V|--version] [-h|--help]
 .I module...
 .RE
 
@@ -30,8 +38,8 @@ source root directory
 .IP "-c|--config path"
 configuration file for RequireJS
 .B
-.IP "--common"
-print only common dependencies for more modules
+.IP "--serve"
+start server for interactive module inspection
 .B
 .IP "--implode-bundles"
 print bundles as dependencies instead of modules
@@ -41,6 +49,24 @@ specify bundles which modules will remain listed
 .B
 .IP "--implode-current-bundle"
 do not list dependencies from the same bundle
+.B
+.IP "-l|--layout layout"
+graph layout (dot, neato, fdp, sfdp, twopi, circo, osage, patchwork)
+.B
+.IP "--emphasize-directs"
+render direct dependencies with different colour
+.B
+.IP "--cluster-directs"
+cluster direct dependencies together
+.B
+.IP "--common"
+print only common dependencies for more modules
+.B
+.IP "--tree"
+print module dependencies as a tree
+.B
+.IP "--image path"
+generate image with dependency graph
 .B
 .IP "-V, --version"
 print version number
