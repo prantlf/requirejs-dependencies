@@ -1,6 +1,6 @@
 /* global location, removeEventListener, Module, Blob */
 
-const locateFile = fileName => `${location.origin}/node_modules/@aduh95/viz.js/dist/${fileName}`
+const locateFile = fileName => `${location.origin}/@aduh95/viz.js/dist/${fileName}`
 
 const onmessage = async function (event) {
   if (this.messageHandler === undefined) {

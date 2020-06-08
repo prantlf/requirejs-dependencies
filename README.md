@@ -36,20 +36,18 @@ for (const { id } of traced) console.log(id)
 If you want to use the command-line tool, install this package globally using your package manager:
 
 ```
-npm i -g requirejs-dependencies @aduh95/viz.js
-yarn global add requirejs-dependencies @aduh95/viz.js
-pnpm i -g requirejs-dependencies @aduh95/viz.js
+npm i -g requirejs-dependencies
+yarn global add requirejs-dependencies
+pnpm i -g requirejs-dependencies
 ```
 
 If you want to use this package programmatically, install it locally using your package manager:
 
 ```
-npm i requirejs-dependencies @aduh95/viz.js
-yarn add requirejs-dependencies @aduh95/viz.js
-pnpm i requirejs-dependencies @aduh95/viz.js
+npm i requirejs-dependencies
+yarn add requirejs-dependencies
+pnpm i requirejs-dependencies
 ```
-
-Make sure that you include the peer dependency `@aduh95/viz.js`.
 
 ## API
 
