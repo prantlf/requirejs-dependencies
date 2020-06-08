@@ -12,7 +12,6 @@ import formatMilliseconds from '../../lib/format-milliseconds'
 import splitList from '../../lib/split-list'
 import Viz from '@aduh95/viz.js'
 
-// const { graphviz } = window['@hpcc-js/wasm']
 let viz, bundleConfig, tracedModule, tracedDependencues, graphContainer,
   errorContainer, implodeOtherBundles, implodeCurrentBundle, explodeBundles,
   excludePlugins, layout, emphasizeDirects, clusterDirects
@@ -132,7 +131,6 @@ async function updateGraph () {
     emphasizeDirects: emphasizeDirects.checked,
     clusterDirects: clusterDirects.checked
   })
-  // const svg = await graphviz.layout(graph.to_dot(), 'svg', graph.get('layout'))
   if (!viz) viz = new Viz(window.vizOptions)
   const svg = await viz.renderString(graph.to_dot())
   const duration = performance.now() - start

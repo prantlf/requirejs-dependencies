@@ -1,23 +1,30 @@
 const { digraph } = require('graphviz')
 
-function configureGraphviz (options = {}) {
-  const { type = 'svg', use = 'dot' } = options
+function mergeDefaults (defaults, options) {
+  if (options) {
+    for (const name in options) {
+      const value = options[name]
+      if (value !== undefined) defaults[name] = value
+    }
+  }
+  return defaults
+}
+
+function configureGraphviz (options) {
   return {
-    type,
-    use,
-    G: Object.assign({
+    G: mergeDefaults({
       overlap: false,
       pad: 0.3,
       rankdir: 'LR',
       layout: 'dot',
       bgcolor: '#111111'
     }, options.G),
-    E: Object.assign({
+    E: mergeDefaults({
       color: '#757575'
     }, options.E),
-    N: Object.assign({
+    N: mergeDefaults({
       fontname: 'Arial',
-      fontsize: '14px',
+      fontsize: 14,
       color: '#c6c5fe',
       shape: 'box',
       style: 'rounded',
