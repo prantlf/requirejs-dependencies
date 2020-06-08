@@ -1,6 +1,7 @@
 # requirejs-dependencies
 
 [![npm](https://img.shields.io/npm/v/requirejs-dependencies)](https://www.npmjs.com/package/requirejs-dependencies#top)
+[![Build Status](https://travis-ci.org/prantlf/requirejs-dependencies.svg?branch=master)](https://travis-ci.org/prantlf/requirejs-dependencies)
 [![Dependency Status](https://david-dm.org/prantlf/requirejs-dependencies.svg)](https://david-dm.org/prantlf/requirejs-dependencies)
 [![devDependency Status](https://david-dm.org/prantlf/requirejs-dependencies/dev-status.svg)](https://david-dm.org/prantlf/requirejs-dependencies#info=devDependencies)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
