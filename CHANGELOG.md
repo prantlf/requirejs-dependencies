@@ -1,3 +1,9 @@
+## [0.0.10](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.9...v0.0.10) (2020-06-08)
+
+### Bug Fixes
+
+* Re-add @aduh95/viz.js as a direct dependency ([7d5b464](https://github.com/prantlf/requirejs-dependencies/commit/7d5b4646120539d9f312c497edeb6f9500ea8dea))
+
 ## [0.0.9](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.8...v0.0.9) (2020-06-08)
 
 ### Bug Fixes
