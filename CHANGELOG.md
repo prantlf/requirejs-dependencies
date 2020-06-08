@@ -1,3 +1,17 @@
+## [0.0.8](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.7...v0.0.8) (2020-06-08)
+
+### Features
+
+* Introduce an interactive web application, generate images ([e722e23](https://github.com/prantlf/requirejs-dependencies/commit/e722e236e03de628038d65e72c539417236db82d))
+
+* Serve a web page for inspecting module dependencies.
+* Allow specifying graph layout.
+* Allow emphasizing direct dependencies by a different colour.
+* Allow putting direct dependencies together to a cluster.
+* Print the dependencies on the console as a two-level tree.
+* Generate images by Graphviz.
+* Add performance tests of using Graphviz as WASM.
+
 ## [0.0.7](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.6...v0.0.7) (2020-06-05)
 
 ### Features
