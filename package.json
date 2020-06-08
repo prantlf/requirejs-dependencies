@@ -1,6 +1,6 @@
 {
   "name": "requirejs-dependencies",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Finds direct and indirect dependencies of one or more RequireJS modules.",
   "author": "Ferdinand Prantl <prantlf@gmail.com> (http://prantlf.tk/)",
   "keywords": [
@@ -48,7 +48,7 @@
     "test": "npm run lint"
   },
   "dependencies": {
-    "@hpcc-js/wasm": "0.3.14",
+    "@aduh95/viz.js": "3.0.0",
     "amodro-trace": "1.0.3",
     "bootstrap": "4.5.0",
     "compression": "1.7.4",
