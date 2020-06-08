@@ -1,3 +1,9 @@
+## [0.0.11](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.10...v0.0.11) (2020-06-08)
+
+### Bug Fixes
+
+* Remove @aduh95/viz.js as a peer dependency ([828aa89](https://github.com/prantlf/requirejs-dependencies/commit/828aa8993eb5bdbde191798e370e673d87179418))
+
 ## [0.0.10](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.9...v0.0.10) (2020-06-08)
 
 ### Bug Fixes
