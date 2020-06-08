@@ -1,7 +1,8 @@
 .DS_Store
 .eslintcache
 .tslintcache
-node_modules
-npm-debug.log
 *.min.*
 *.map
+node_modules
+npm-debug.log
+test/typings.js

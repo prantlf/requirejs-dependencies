@@ -8,5 +8,9 @@
     "**/*.map": true,
     "**/node_modules": true,
     "**/pnpm-lock.yaml": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/test/typings.js": true
   }
 }
