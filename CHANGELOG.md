@@ -1,3 +1,12 @@
+## [0.0.9](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.8...v0.0.9) (2020-06-08)
+
+### Bug Fixes
+
+* Make of @aduh95/viz.js a peer dependency ([e389076](https://github.com/prantlf/requirejs-dependencies/commit/e3890769cf7cade013aa354a39d5f9bb4e556714))
+
+* Fix including the web worker.
+* Remove dependency on @hpcc-js/wasm.
+
 ## [0.0.8](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.7...v0.0.8) (2020-06-08)
 
 ### Features
