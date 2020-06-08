@@ -2,9 +2,11 @@
 {
   "files.exclude": {
     "**/.git": true,
-    "**/.vscode": true,
-    "**/node_modules": true,
+    "**/.eslintcache": true,
+    "**/.tslintcache": true,
     "**/*.min.*": true,
-    "**/*.map": true
+    "**/*.map": true,
+    "**/node_modules": true,
+    "**/pnpm-lock.yaml": true
   }
 }

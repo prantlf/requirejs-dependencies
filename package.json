@@ -42,9 +42,12 @@
     "build:html": "html-minifier --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --remove-attribute-quotes --minify-css true --minify-js true -o www/index.min.html www/index.html && sed -i \"s/VERSION/0.0.8/\" www/index.min.html",
     "build": "npm run build:js && npm run build:css && npm run build:html",
     "prepare": "npm run build",
-    "lint:js": "eslint --fix --ignore-pattern 'www/js/*.min.js' 'bin/*' lib www/js",
-    "lint:ts": "eslint -c .tslintrc.yml --fix lib/index.d.ts",
+    "lint:js": "eslint --cache --max-warnings=0 --ignore-pattern 'www/js/*.min.js' 'bin/*' lib www/js",
+    "lint:ts": "eslint --cache --max-warnings=0 --cache-location .tslintcache -c .tslintrc.yml lib/index.d.ts",
     "lint": "npm run lint:js && npm run lint:ts",
+    "fix:js": "eslint --cache --max-warnings=0 --fix --ignore-pattern 'www/js/*.min.js' 'bin/*' lib www/js",
+    "fix:ts": "eslint --cache --max-warnings=0 --cache-location .tslintcache -c .tslintrc.yml --fix lib/index.d.ts",
+    "fix": "npm run fix:js && npm run fix:ts",
     "test": "npm run lint"
   },
   "dependencies": {
