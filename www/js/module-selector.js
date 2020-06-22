@@ -3,22 +3,24 @@
 import $ from './jquery'
 import 'popper.js'
 import 'bootstrap'
+import 'graphviz-webcomponent/dist/graph.min.js'
 import { startProgress, stopProgress } from './progress'
+import excludeModuleDependencies from '../../lib/exclude-modules'
 import excludePluginDependencies from '../../lib/exclude-plugins'
 import implodeBundleDependencies from '../../lib/implode-bundles'
 import generateGraph from '../../lib/generate-graph'
 import createTree from '../../lib/create-tree'
 import formatMilliseconds from '../../lib/format-milliseconds'
 import splitList from '../../lib/split-list'
-import Viz from '@aduh95/viz.js'
 
-let viz, bundleConfig, tracedModule, tracedDependencues, graphContainer,
+let excludedModules = []
+let bundleConfig, tracedModule, tracedDependencues, graphComponent,
   errorContainer, implodeOtherBundles, implodeCurrentBundle, explodeBundles,
-  excludePlugins, layout, emphasizeDirects, clusterDirects
+  excludePlugins, unhideModules, layout, emphasizeDirects, clusterDirects, startRender
 
 async function initializeModuleSelector () {
-  graphContainer = document.getElementById('graph')
-  errorContainer = document.getElementById('alert')
+  initializeGraphComponent()
+  initializeErrorAlert()
   try {
     bundleConfig = await fetchData('/bundles')
     const [bundles, modules, plugins] = divideBundleConfig(bundleConfig)
@@ -26,13 +28,23 @@ async function initializeModuleSelector () {
     initializeExplodeBundles(bundles)
     initializeExcludePlugins(plugins)
     initializeImplodeBundles()
+    initializeUnhideModules()
     initializeGraphOptions()
-    document
-      .getElementsByTagName('main')[0]
-      .style.display = 'block'
+    unblockPage()
   } catch {
     // error handled by fetchData
   }
+}
+
+function initializeGraphComponent () {
+  graphComponent = document.getElementById('graph')
+  graphComponent.addEventListener('render', graphRendered)
+  graphComponent.addEventListener('error', graphFailed)
+  graphComponent.addEventListener('click', graphClicked)
+}
+
+function initializeErrorAlert () {
+  errorContainer = document.getElementById('alert')
 }
 
 function initializeModules (modules) {
@@ -68,6 +80,11 @@ function initializeImplodeBundles () {
   implodeCurrentBundle.addEventListener('change', updateGraph)
 }
 
+function initializeUnhideModules () {
+  unhideModules = document.getElementById('unhide-modules')
+  unhideModules.addEventListener('click', clearExcludedModules)
+}
+
 function initializeGraphOptions () {
   layout = document.getElementById('layout')
   emphasizeDirects = document.getElementById('emphasize-directs')
@@ -96,6 +113,12 @@ function divideBundleConfig (bundleConfig) {
   return [bundles, modules, plugins]
 }
 
+function unblockPage () {
+  document
+    .getElementsByTagName('main')[0]
+    .style.display = 'block'
+}
+
 async function inspectModule ({ target }) {
   const { value } = target
   if (!value) return clearGraph()
@@ -113,10 +136,8 @@ async function inspectModule ({ target }) {
 async function updateGraph () {
   if (!tracedModule) return
   startProgress()
-  const start = performance.now()
-  const exclude = excludePlugins.value
-  let traced = exclude ? excludePluginDependencies(
-    tracedDependencues, splitList(exclude)) : tracedDependencues
+  startRender = performance.now()
+  let traced = tracedDependencues
   if (implodeOtherBundles.checked) {
     traced = implodeBundleDependencies({
       traced,
@@ -126,17 +147,42 @@ async function updateGraph () {
       tracedBundle: tracedModule
     })
   }
+  const excludedPlugins = splitList(excludePlugins.value)
+  if (excludedPlugins.length) {
+    traced = excludePluginDependencies(traced, excludedPlugins)
+  }
+  if (excludedModules.length) {
+    traced = excludeModuleDependencies(traced, excludedModules)
+  }
   const graph = generateGraph(createTree(tracedModule, traced), {
     G: { layout: layout.value },
     emphasizeDirects: emphasizeDirects.checked,
     clusterDirects: clusterDirects.checked
   })
-  if (!viz) viz = new Viz(window.vizOptions)
-  const svg = await viz.renderString(graph.to_dot())
-  const duration = performance.now() - start
+  graphComponent.graph = graph.to_dot()
+}
+
+function graphRendered () {
+  const duration = performance.now() - startRender
   console.log(`${tracedModule} rendered in ${formatMilliseconds(duration)}`)
-  setGraph(svg)
+  hideError()
   stopProgress()
+}
+
+function graphFailed () {
+  const duration = performance.now() - startRender
+  console.log(`${tracedModule} failed in ${formatMilliseconds(duration)}`)
+  hideError()
+  stopProgress()
+}
+
+function graphClicked (event) {
+  const path = event.composedPath()
+  const node = path[0]
+  if (node.tagName !== 'text') return
+  excludedModules.push(node.textContent)
+  unhideModules.disabled = false
+  updateGraph()
 }
 
 async function fetchData (url) {
@@ -157,12 +203,8 @@ async function fetchData (url) {
 
 function clearGraph () {
   tracedModule = tracedDependencues = undefined
-  setGraph('')
-}
-
-function setGraph (svg) {
+  graphComponent.graph = ''
   hideError()
-  graphContainer.innerHTML = svg
 }
 
 function reportError ({ message }) {
@@ -176,7 +218,13 @@ function hideError () {
 }
 
 function resizeGraph ({ target }) {
-  graphContainer.style.transform = `scale(.${target.value})`
+  graphComponent.scale = `0.${target.value}`
+}
+
+function clearExcludedModules () {
+  excludedModules = []
+  unhideModules.disabled = true
+  updateGraph()
 }
 
 export { initializeModuleSelector }
