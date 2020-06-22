@@ -1,3 +1,9 @@
+# [0.1.0](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.11...v0.1.0) (2020-06-22)
+
+### Features
+
+* Integrate graphviz-builder, graphviz-cli and graphviz-webcomponent to handle graph image generation ([f27c148](https://github.com/prantlf/requirejs-dependencies/commit/f27c148f341ad2fe609c2ad1ee08e22710fb72d6))
+
 ## [0.0.11](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.10...v0.0.11) (2020-06-08)
 
 ### Bug Fixes
