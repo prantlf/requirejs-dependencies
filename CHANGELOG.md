@@ -1,3 +1,10 @@
+# [0.1.1](https://github.com/prantlf/requirejs-dependencies/compare/v0.1.0...v0.1.1) (2020-07-03)
+
+### Bug Fixes
+
+* Add canvas and graphviz-webcomponent as peer dependencies for optional functionality ([c1cdec6](https://github.com/prantlf/requirejs-dependencies/commit/c1cdec66f26588d14ff72954e5d2895fb3af20e4))
+* Do not modify input arguments of functions excluding modules and imploding bundles ([fc303a3](https://github.com/prantlf/requirejs-dependencies/commit/fc303a38097851130753342b0d13364fb26141bd))
+
 # [0.1.0](https://github.com/prantlf/requirejs-dependencies/compare/v0.0.11...v0.1.0) (2020-06-22)
 
 ### Features
