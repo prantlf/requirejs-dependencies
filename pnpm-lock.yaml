@@ -6,6 +6,7 @@ dependencies:
   connect: 3.7.0
   graphviz-builder: 0.0.1
   graphviz-cli: 1.0.0_canvas@2.6.1
+  graphviz-webcomponent: 0.4.2
   jquery: 3.5.1
   morgan: 1.10.0
   popper.js: 1.16.1
@@ -24,7 +25,6 @@ devDependencies:
   eslint-plugin-node: 11.1.0_eslint@7.3.1
   eslint-plugin-promise: 4.2.1
   eslint-plugin-standard: 4.0.1_eslint@7.3.1
-  graphviz-webcomponent: 0.4.2
   html-minifier: 4.0.0
   test: 0.6.0
   typescript: 3.9.6
@@ -1175,7 +1175,7 @@ packages:
     resolution:
       integrity: sha512-aPv1r4kP7I5cVGu73WjVc/h5OdebB0z+acWiN+0YFnSRK2UQlWudp/xlqXCQdn/b5caw0GSxLysZS60K5pqRJw==
   /graphviz-webcomponent/0.4.2:
-    dev: true
+    dev: false
     engines:
       node: '>=10'
     resolution:
