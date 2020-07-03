@@ -51,7 +51,8 @@
     "fix": "npm run fix:js && npm run fix:ts",
     "check:ts": "node test/typings",
     "check": "npm run check:ts",
-    "test": "npm run lint && npm run check"
+    "test": "npm run lint && npm run check",
+    "all": "npm run build && npm test"
   },
   "dependencies": {
     "@hpcc-js/wasm": "0.3.14",
@@ -61,27 +62,32 @@
     "connect": "3.7.0",
     "graphviz-builder": "0.0.1",
     "graphviz-cli": "1.0.0",
+    "graphviz-webcomponent": "0.4.2",
     "jquery": "3.5.1",
     "morgan": "1.10.0",
     "popper.js": "1.16.1",
     "serve-static": "1.14.1"
   },
   "devDependencies": {
-    "@types/node": "14.0.13",
-    "@typescript-eslint/eslint-plugin": "3.3.0",
-    "@typescript-eslint/parser": "3.3.0",
+    "@types/node": "14.0.14",
+    "@typescript-eslint/eslint-plugin": "3.5.0",
+    "@typescript-eslint/parser": "3.5.0",
+    "canvas": "2.6.1",
     "csso-cli": "3.0.0",
-    "esbuild": "0.5.9",
-    "eslint": "7.3.0",
+    "esbuild": "0.5.19",
+    "eslint": "7.3.1",
     "eslint-config-standard": "14.1.1",
     "eslint-config-standard-with-typescript": "18.0.2",
-    "eslint-plugin-import": "2.21.2",
+    "eslint-plugin-import": "2.22.0",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-standard": "4.0.1",
-    "graphviz-webcomponent": "0.3.1",
     "html-minifier": "4.0.0",
     "test": "0.6.0",
-    "typescript": "3.9.5"
+    "typescript": "3.9.6"
+  },
+  "peerDependencies": {
+    "canvas": "2.6.1",
+    "graphviz-webcomponent": "0.4.2"
   }
 }

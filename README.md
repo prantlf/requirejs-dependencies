@@ -50,6 +50,10 @@ yarn add requirejs-dependencies
 pnpm i requirejs-dependencies
 ```
 
+If you want to render graphs to `png` on the command line, install the peer dependency `canvas` in the same way as you did the module `requirejs-dependencies` above.
+
+If you want to use the web application (argument `--serve`) install the peer dependency `graphviz-webcomponent` in the same way as you did the module `requirejs-dependencies` above.
+
 ## API
 
 ### traceSingle(options: object): Promise\<object\>
